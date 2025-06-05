@@ -4,24 +4,12 @@ Swipe-style movie recommendations on iOS—powered by hybrid AI models and a cle
 
 ---
 
-## 📸 Screenshots
+## 📸 App_video
 
-> Place these files under `docs/assets/` and update the paths as needed.
 
-### Onboarding & Sign-In  
-![Sign In Screen](docs/assets/sign-in.png)
+### App-Video
+![Sign In Screen](docs/assets/App_video.gif)
 
-### Genre Selection  
-![Genre Preferences](docs/assets/genre-selection.png)
-
-### Swipe Flow  
-![Swipe Interface](docs/assets/swipe-demo.gif)
-
-### Recommendations List  
-![Recommendations](docs/assets/recommendations.png)
-
-### Movie Details  
-![Movie Details](docs/assets/movie-details.png)
 
 ---
 
