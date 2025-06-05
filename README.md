@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="docs/assets/app_icon.png" width="180" alt="MovieMatch Icon"/>
+</div>
+
 # MovieMatchApp
 
 Swipe-style movie recommendations on iOS—powered by hybrid AI models and a clean SwiftUI interface.
