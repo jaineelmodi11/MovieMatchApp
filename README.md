@@ -1,58 +1,27 @@
-<!--━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-->
-<p align="center">
-  <!-- If you have a logo or app icon, place it in `/docs/assets` and point to it here -->
-  <img src="docs/assets/icon.png" alt="MovieMatchApp Logo" width="120"/>
-  <h1 align="center">MovieMatchApp</h1>
-  <p align="center">
-    Swipe-style movie recommendations on iOS—powered by hybrid AI models and a clean SwiftUI interface.
-  </p>
-  <p align="center">
-    <!-- Optional badges: replace URLs/paths as appropriate -->
-    <a href="https://github.com/jaineelmodi11/MovieMatchApp/actions">
-      <img src="https://img.shields.io/github/actions/workflow/status/jaineelmodi11/MovieMatchApp/ci.yml?branch=main" alt="Build Status"/>
-    </a>
-    <a href="https://github.com/jaineelmodi11/MovieMatchApp/releases/latest">
-      <img src="https://img.shields.io/github/v/release/jaineelmodi11/MovieMatchApp" alt="Latest Release"/>
-    </a>
-    <a href="LICENSE">
-      <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="MIT License"/>
-    </a>
-  </p>
-</p>
-<!--━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-->
+# MovieMatchApp
 
-<div align="center">
-  <strong>Download on the App Store:</strong>  
-  <!-- If you have an App Store link, put it here -->
-  <a href="https://apps.apple.com/app/idXXXXXXXXX"><img src="docs/assets/appstore-badge.svg" alt="App Store"/></a>  
-  &nbsp;&nbsp;&nbsp;
-  <strong>Source Code:</strong>  
-  <a href="https://github.com/jaineelmodi11/MovieMatchApp"><code>github.com/jaineelmodi11/MovieMatchApp</code></a>
-</div>
+Swipe-style movie recommendations on iOS—powered by hybrid AI models and a clean SwiftUI interface.
 
 ---
 
-## 🚀 Table of Contents
+## 📸 Screenshots
 
-1. [About](#about)  
-2. [Key Features](#key-features)  
-3. [Tech Stack](#tech-stack)  
-4. [Architecture & Flow](#architecture--flow)  
-5. [Getting Started](#getting-started)  
-   - [Prerequisites](#prerequisites)  
-   - [Installation & Setup](#installation--setup)  
-   - [Building & Running](#building--running)  
-6. [Usage](#usage)  
-   - [Navigating the App](#navigating-the-app)  
-   - [Movie Swipe Flow](#movie-swipe-flow)  
-7. [Configuration & Environment Variables](#configuration--environment-variables)  
-8. [Testing with Recsend CLI](#testing-with-recsend-cli)  
-9. [Screenshots](#screenshots)  
-10. [Continuous Integration (CI)](#continuous-integration-ci)  
-11. [Contributing](#contributing)  
-12. [License](#license)  
-13. [Acknowledgments & Credits](#acknowledgments--credits)  
-14. [Contact](#contact)
+> Place these files under `docs/assets/` and update the paths as needed.
+
+### Onboarding & Sign-In  
+![Sign In Screen](docs/assets/sign-in.png)
+
+### Genre Selection  
+![Genre Preferences](docs/assets/genre-selection.png)
+
+### Swipe Flow  
+![Swipe Interface](docs/assets/swipe-demo.gif)
+
+### Recommendations List  
+![Recommendations](docs/assets/recommendations.png)
+
+### Movie Details  
+![Movie Details](docs/assets/movie-details.png)
 
 ---
 
@@ -70,9 +39,8 @@ All of this runs on a backend (Flask/Node/Django—or whatever your stack is). T
 > 2. **Interactivity:** A familiar swipe UI makes exploring movies fun (and addictive!).  
 > 3. **Hybrid AI Engine:** By combining sentence embeddings and collaborative signals, recommendations become both novel and relevant.
 
-<br/>
-
 ---
+
 
 ## ⭐ Key Features
 
