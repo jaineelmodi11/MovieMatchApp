@@ -21,7 +21,6 @@ _Click the image above to watch the demo on YouTube._
 MovieMatchApp is an **iOS application** built in **Swift** (SwiftUI/UIKit) that allows users to swipe left/right on movie cards—much like a dating app—and receive **personalized, hybrid‐model** recommendations. Behind the scenes, we combine:
 
 - **Content-based filtering** (sentence embeddings of movie overviews via a Sentence-Transformers model)  
-- **Collaborative filtering** (implicit feedback matrix factorization)
 
 All of this runs on a backend (Flask/Node/Django—or whatever your stack is). The iOS client calls RESTful endpoints to fetch “next swipe card,” record “liked/disliked” swipes, and retrieve top recommendations.
 
