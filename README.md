@@ -137,7 +137,6 @@ All of this runs on a backend (Flask/Node/Django—or whatever your stack is). T
   - **Caching / Message Broker:** Redis + Celery for nightly retraining & email digests.  
   - **ML Libraries:**  
     - `sentence-transformers` (e.g., `all-MiniLM-L6-v2`) for content embeddings.  
-    - `implicit` library for collaborative filtering.  
   - **Hosting/Deployment:** Heroku / AWS Elastic Beanstalk / Docker (your chosen platform).
 
 - **Testing**  
