@@ -186,30 +186,111 @@ All of this runs on a backend (Flask/Node/Django—or whatever your stack is). T
  │ transformers+ │
  │ implicit CF)  │
  └───────────────┘
-```text
+```
 
 
-## 🔧 Getting Started
+## 🧪 Testing with Recsend CLI
 
-### Prerequisites
+We use **Recsend**—a developer‐focused CLI—to automate end‐to‐end tests of our backend API, rather than manually issuing `curl` commands. This ensures:
 
-Before you begin, ensure you have the following installed on your machine:
+- **Readable YAML/JSON Test Suites**  
+  Define request payloads and expected responses in clean, version‐controlled `*.yaml` files.
+- **Reusable Test Suites**  
+  Group multiple endpoints (e.g., user registration, swipe events, recommendations) in one Recsend run.
+- **Automatic Assertions**  
+  Verify HTTP status codes, JSON schema shape, and specific response fields.
+- **Integration in CI**  
+  GitHub Actions invokes Recsend on every push/PR to catch regressions early.
 
-- **Xcode 14.0+** (for building and running the iOS client)  
-- **Swift 5.5+**  
-- **CocoaPods** or **Swift Package Manager** (depending on how you manage dependencies)  
-- **Python 3.9+** (if you’re running the backend locally with Flask)  
-- **PostgreSQL 14+** (for local database)  
-- **Redis 6+** (if you use Celery on the backend)  
-- **Recsend CLI** (for API testing—see the “Testing with Recsend CLI” section below)
+### How to Run Recsend Tests
 
-### Installation & Setup
-
-#### Clone the MovieMatchApp Repo
-
+**Install Recsend CLI**  
+First, clone the Recsend repository, install its dependencies, and return to the main folder.
 ```bash
-git clone https://github.com/jaineelmodi11/MovieMatchApp.git
-cd MovieMatchApp
+git clone https://github.com/jaineelmodi11/recsend-developer-focused-CLI.git
+cd recsend-developer-focused-CLI
+pip install -r requirements.txt
+cd ..
+```
+
+**Navigate to the Recsend Config Directory**  
+Change into the `MovieMatchApp/recsend_tests/` folder (where your YAML test definitions live).
 ```bash
+cd MovieMatchApp/recsend_tests
+```
 
+**Execute the Test Suite**  
+Run the `recsend` command with your base URL and config files (e.g., `users.yaml`, `swipes.yaml`, `recommendations.yaml`). 
+```bash
+recsend \
+  --base-url=http://localhost:5000/api \
+  --config=users.yaml \
+  --config=swipes.yaml \
+  --config=recommendations.yaml
 
+```
+
+Each `*.yaml` file should define multiple test cases (request + expected result).
+```yaml
+- name: "Record a swipe (like)"
+  request:
+    method: POST
+    path: "/swipe"
+    headers:
+      Authorization: "Bearer {{user_token}}"
+      Content-Type: "application/json"
+    body:
+      user_id: "{{user_id}}"
+      movie_id: 1234
+      liked: true
+  expected:
+    status_code: 200
+    body_contains:
+      success: true
+
+- name: "Fetch 10 recommendations"
+  request:
+    method: GET
+    path: "/recommendations/{{user_id}}?count=10"
+    headers:
+      Authorization: "Bearer {{user_token}}"
+  expected:
+    status_code: 200
+    body_schema: "recommendations_schema.json"
+```
+
+**Review Results**  
+- A green output (“✅ All tests passed”) means the backend matches the client’s expectations.  
+- Any failures will print a diff showing which fields mismatched or which status code was unexpected.
+
+---
+
+### Why Recsend vs. cURL?
+
+**Clarity**  
+A long `curl` command can be difficult to read and maintain. In Recsend, you describe each test case using a simple YAML structure:
+```yaml
+  name: “Record a swipe (like)”  
+  request:  
+    method: POST  
+    path: “/swipe”  
+    headers:  
+      Authorization: “Bearer {{user_token}}”  
+      Content-Type: “application/json”  
+    body:  
+      user_id: “{{user_id}}”  
+      movie_id: 1234  
+      liked: true  
+  expected:  
+    status_code: 200  
+    body_contains:  
+      success: true  
+```
+
+This format is far more readable than embedding everything inside a single, lengthy `curl` command.
+
+**Maintainability**  
+If your API contract changes (for example, request or response fields are updated), you simply edit the YAML file. No need to hunt through multiple `curl` scripts to apply the same change.
+
+**Automation**  
+With Recsend, you can run all test suites at once by listing multiple config files. This lets you validate user registration, swipe events, recommendation endpoints, etc., with a single command—ideal for automated CI workflows.  
