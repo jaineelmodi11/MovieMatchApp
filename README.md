@@ -8,9 +8,11 @@ Swipe-style movie recommendations on iOS—powered by hybrid AI models and a cle
 
 
 ### App-Video
-[![App Video Demo](docs/assets/App_video_thumbnail.png)](https://youtu.be/kNuhy5lUNlg)
-_Click the image above to watch the demo on YouTube._
+<a href="https://youtu.be/kNuhy5lUNlg">
+  <img src="docs/assets/App_video_thumbnail.png" width="400" alt="App Video Demo"/>
+</a>
 
+_Click the image above to watch the demo on YouTube._
 
 ---
 
