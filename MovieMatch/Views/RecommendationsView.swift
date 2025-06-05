@@ -1,5 +1,3 @@
-// Views/RecommendationsView.swift
-
 import SwiftUI
 
 struct RecommendationsView: View {
@@ -207,6 +205,10 @@ struct RecommendationsView: View {
             }
         }
         .onAppear(perform: loadAllRecs)
+        // ───────────────────────────────────────────────────────────────────
+        // Make the Tab Bar transparent / blurred
+        .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+        .toolbarBackground(.visible,            for: .tabBar)
     }
 
     // ─── Step 1: Fetch content, CF, hybrid, then fallback to /movies until we have 50 ────────────────────
@@ -314,5 +316,12 @@ struct RecommendationsView: View {
             }
             isLoadingMore = false
         }
+    }
+}
+
+struct RecommendationsView_Previews: PreviewProvider {
+    static var previews: some View {
+        RecommendationsView()
+            .preferredColorScheme(.dark)
     }
 }

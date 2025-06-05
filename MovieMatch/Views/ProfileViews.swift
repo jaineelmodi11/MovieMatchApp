@@ -1,5 +1,3 @@
-// Views/ProfileView.swift
-
 import SwiftUI
 
 struct ProfileView: View {
@@ -34,9 +32,9 @@ struct ProfileView: View {
                 }
             }
         }
-        // make the TabBar transparent
+        // Make the Tab Bar transparent / blurred
         .toolbarBackground(.ultraThinMaterial, for: .tabBar)
-        .toolbarBackground(.visible,          for: .tabBar)
+        .toolbarBackground(.visible,            for: .tabBar)
     }
 
     // MARK: - Top Header
