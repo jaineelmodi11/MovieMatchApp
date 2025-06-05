@@ -8,7 +8,7 @@ Swipe-style movie recommendations on iOS—powered by hybrid AI models and a cle
 
 
 ### App-Video
-![Sign In Screen](docs/assets/App_video.gif)
+![App_Video](docs/assets/App_video.gif)
 
 
 ---
