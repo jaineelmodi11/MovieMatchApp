@@ -26,7 +26,7 @@ MovieMatchApp is an **iOS application** built in **Swift** (SwiftUI/UIKit) that 
 
 - **Content-based filtering** (sentence embeddings of movie overviews via a Sentence-Transformers model)  
 
-All of this runs on a backend (Flask/Node/Django—or whatever your stack is). The iOS client calls RESTful endpoints to fetch “next swipe card,” record “liked/disliked” swipes, and retrieve top recommendations.
+All of this runs on a backend Flask. The iOS client calls RESTful endpoints to fetch “next swipe card,” record “liked/disliked” swipes, and retrieve top recommendations.
 
 > **Why “MovieMatch”?**  
 > 1. **Discoverability:** Streaming platforms overload you with choices. MovieMatchApp narrows it down to what you’ll actually enjoy.  
