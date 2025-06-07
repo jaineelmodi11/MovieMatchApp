@@ -22,7 +22,7 @@ _Click the image above to watch the demo on YouTube._
 
 ## 📖 About
 
-MovieMatchApp is an **iOS application** built in **Swift** (SwiftUI/UIKit) that allows users to swipe left/right on movie cards—much like a dating app—and receive **personalized, hybrid‐model** recommendations. Behind the scenes, we combine:
+MovieMatchApp is an **iOS application** built in **Swift** (SwiftUI/UIKit) that allows users to swipe left/right on movie cards—much like a dating app—and receive **personalized, Content‐Filtered model** recommendations. Behind the scenes, we combine:
 
 - **Content-based filtering** (sentence embeddings of movie overviews via a Sentence-Transformers model)  
 
