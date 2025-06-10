@@ -1,0 +1,4 @@
+# Fetch recommendations based on current swipe history
+url: http://localhost:3000/recommendations
+method: GET
+timeout: 5    # seconds

@@ -1,0 +1,9 @@
+# configs/swipe-like.yml
+url: http://localhost:3000/swipes
+method: POST
+headers:
+  Content-Type: application/json
+body:           # ← use “body”, not “data” or “json”
+  movieId: 1
+  direction: like
+timeout: 5
