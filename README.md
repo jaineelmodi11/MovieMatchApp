@@ -107,32 +107,81 @@ On the backend, an **Express** proxy routes API calls to a **Flask** ML service 
 
 ---
 
-## 🧪 Testing Content-Based Recommendations
+## 🧪 Testing with Recsend CLI
 
-1. **Start services**  
-   - **Flask ML Service:**
-     ```bash
-     cd movie-backend
-     source venv/bin/activate
-     python service.py
-     ```  
-   - **Express Proxy:**
-     ```bash
-     cd movie-backend
-     node server.js
-     ```
+We use a developer-focused **Recsend CLI** to automate end-to-end testing of our content-based recommendation endpoint. RecSend lets you:
 
-2. **Run Recsend CLI:**
-   ```bash
-   cd recsend_tests
-   recsend send -f users.yaml
-   recsend send -f swipes.yaml
-   recsend send -f content_recs.yaml
-   ```
+- **Define Tests in YAML:** Specify request details, headers, body, and expected status codes or response content in version-controlled YAML files.
+- **Run Single or Multiple Suites:** Execute individual test files with `recsend send -f <file>` or batch tests via shell scripts.
+- **Immediate Feedback:** See request URLs, HTTP status codes, response bodies, and simple diffs against expected values.
+- **CI Integration:** Invoke RecSend in GitHub Actions (or other CI) to enforce API stability on every push/PR.
 
-3. **Or via cURL:**
-   ```bash
-   curl http://localhost:3000/recommendations/content/1 | jq .
-   ```
+### Sample Test Files
 
-*README updated to reflect content-based only.*
+#### `users.yaml`
+```yaml
+url: http://localhost:3000/users/importOrGetId
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  firebaseUid: "test-uid-123"
+  displayName: "Test User"
+expected:
+  status_code: 200
+  body_contains:
+    userId: 14
+```
+
+#### `swipes.yaml`
+```yaml
+url: http://localhost:3000/swipes
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  userId: 14
+  movieId: 1376434
+  direction: "like"
+expected:
+  status_code: 200
+  body_contains:
+    success: true
+```
+
+#### `content_recs.yaml`
+```yaml
+url: http://localhost:3000/recommendations/content/14
+method: GET
+expected:
+  status_code: 200
+  body_contains:
+    - id
+    - overview
+    - title
+```
+
+### Running Tests
+
+```bash
+cd recsend_tests
+recsend send -f users.yaml
+recsend send -f swipes.yaml
+recsend send -f content_recs.yaml
+```
+
+Or create a `run-tests.sh` script:
+```bash
+#!/usr/bin/env bash
+set -e
+recsend send -f users.yaml
+recsend send -f swipes.yaml
+recsend send -f content_recs.yaml
+echo "All tests passed!"
+```
+
+### Manual cURL Check
+
+```bash
+curl http://localhost:3000/recommendations/content/1 | jq .
+```
