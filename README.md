@@ -10,7 +10,10 @@ Swipe-style movie recommendations on iOS—powered by content-based AI and a cle
 
 ## 📸 App Video Demo
 
-https://user-images.githubusercontent.com/jaineelmodi11/MovieMatchApp/main/docs/assets/App_video.mp4
+
+Uploading App_video_demo.mp4…
+
+
 
 *(Playable inline on GitHub via video attachment)*
 
@@ -34,9 +37,6 @@ Your backend consists of an **Express** proxy and a **Flask** ML service using S
 
 - **Firebase Authentication**  
   Email/password sign‑up & sign‑in via Firebase Auth.
-
-- **Dark Mode Support**  
-  Fully adapts to iOS system appearance.
 
 - **Recsend CLI for Testing**  
   Developer-focused CLI for validating endpoints with YAML-defined requests.
