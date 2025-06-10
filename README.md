@@ -4,107 +4,70 @@
 
 # MovieMatchApp
 
-Swipe-style movie recommendations on iOS—powered by hybrid AI models and a clean SwiftUI interface.
+Swipe-style movie recommendations on iOS—powered by content-based AI and a clean SwiftUI interface.
 
 ---
 
-## 📸 App_video demo
+## 📸 App Video Demo
 
+https://user-images.githubusercontent.com/jaineelmodi11/MovieMatchApp/main/docs/assets/App_video.mp4
 
-https://github.com/user-attachments/assets/a39bdd53-db26-46fd-a1d0-ccaaa422e047
-
-
-
-
-_Click the image above to watch the demo on YouTube._
+*(Playable inline on GitHub via video attachment)*
 
 ---
 
 ## 📖 About
 
-MovieMatchApp is an **iOS application** built in **Swift** (SwiftUI/UIKit) that allows users to swipe left/right on movie cards—much like a dating app—and receive **personalized, Content‐Filtered model** recommendations. Behind the scenes, we combine:
+MovieMatchApp is an **iOS app** built in **Swift** with **SwiftUI + Combine**, featuring a Tinder‑style swipe interface. Users swipe right to like and left to pass on movie cards, and receive recommendations based solely on movie content embeddings.
 
-- **Content-based filtering** (sentence embeddings of movie overviews via a Sentence-Transformers model)  
-
-All of this runs on a backend Flask. The iOS client calls RESTful endpoints to fetch “next swipe card,” record “liked/disliked” swipes, and retrieve top recommendations.
-
-> **Why “MovieMatch”?**  
-> 1. **Discoverability:** Streaming platforms overload you with choices. MovieMatchApp narrows it down to what you’ll actually enjoy.  
-> 2. **Interactivity:** A familiar swipe UI makes exploring movies fun (and addictive!).  
-> 3. **Hybrid AI Engine:** By combining sentence embeddings and collaborative signals, recommendations become both novel and relevant.
+Your backend consists of an **Express** proxy and a **Flask** ML service using Sentence‑Transformers (`all‑MiniLM‑L6‑v2`).
 
 ---
-
 
 ## ⭐ Key Features
 
 - **Swipe Interface**  
-  - Quickly browse movies one by one; swipe right to “Like,” left to “Pass.”
+  Browse movies one by one: swipe right to “Like,” left to “Pass.”
 
-- **Hybrid Recommendation Engine**  
-  - **Content-Based:** Uses a fine‐tuned Sentence-Transformers model to calculate similarity between movie overviews.  
-  - **Collaborative Filtering:** Leverages user‐movie interaction data (implicit feedback) to refine suggestions.
+- **Content-Based Recommendation Engine**  
+  Embeds movie overviews via a Sentence‑Transformers model and finds similar titles.
 
-- **Firebase Authentication** (Email/Password + Google OAuth)
-  - Email/password sign-up & sign-in. Optionally, include Google/Facebook OAuth.
-
-- **Movie Details & Trailers**  
-  - Tap on a card to see synopsis, cast, ratings, and embedded trailer (YouTube).
-
-- **Daily/Weekly Email Digest**  
-  - (Optional) Get top 5 new recommendations in your inbox every morning.  
-
-- **Offline Caching**  
-  - Stores recently viewed posters and details to improve load times when network is slow.
+- **Firebase Authentication**  
+  Email/password sign‑up & sign‑in via Firebase Auth.
 
 - **Dark Mode Support**  
-  - Fully responsive to iOS system appearance.
+  Fully adapts to iOS system appearance.
 
-- **Unit & UI Tests**  
-  - Xcode Test target covering core MVVM logic and critical UI flows.
-
-- **Recsend CLI for End-to-End Testing**  
-  - Instead of hand-crafting cURL calls, we use [Recsend-Developer-Focused-CLI](https://github.com/jaineelmodi11/recsend-developer-focused-CLI) to validate all backend endpoints (swipe events, recommendation fetch, user signup) from Swift code. See [“Testing with Recsend CLI”](#testing-with-recsend-cli) below.
+- **Recsend CLI for Testing**  
+  Developer-focused CLI for validating endpoints with YAML-defined requests.
 
 ---
 
 ## 🧰 Tech Stack
 
 <p align="center">
-  <!-- You can swap icons/badges if you prefer -->
   <img src="https://img.shields.io/badge/Swift-5.5-orange.svg" alt="Swift 5.5"/>
-  <img src="https://img.shields.io/badge/Xcode-14.0-blue.svg" alt="Xcode 14"/>
   <img src="https://img.shields.io/badge/SwiftUI-2.0-purple.svg" alt="SwiftUI"/>
   <img src="https://img.shields.io/badge/Combine-1.0-lightgrey.svg" alt="Combine"/>
-  <img src="https://img.shields.io/badge/Alamofire-5.4.4-red.svg" alt="Alamofire"/>
-  <img src="https://img.shields.io/badge/Realm-10.25-lightblue.svg" alt="Realm"/>
-  <img src="https://img.shields.io/badge/Firebase-9.9.1-yellow.svg" alt="Firebase"/>
-  <img src="https://img.shields.io/badge/Node.js-18.0-green.svg" alt="Node.js (backend)"/>
-  <img src="https://img.shields.io/badge/Flask-2.1-grey.svg" alt="Flask (backend)"/>
+  <img src="https://img.shields.io/badge/Firebase-9.x-blue.svg" alt="Firebase"/>
+  <img src="https://img.shields.io/badge/Node.js-18.0-green.svg" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Express-4.x-lightgrey.svg" alt="Express"/>
+  <img src="https://img.shields.io/badge/Flask-2.1-grey.svg" alt="Flask"/>
   <img src="https://img.shields.io/badge/PostgreSQL-14.4-blue.svg" alt="PostgreSQL"/>
-  <img src="https://img.shields.io/badge/Redis-6.2-red.svg" alt="Redis (Celery broker)"/>
+  <img src="https://img.shields.io/badge/Sentence--Transformers-orange.svg" alt="sentence-transformers"/>
+  <img src="https://img.shields.io/badge/axios-1.x-blue.svg" alt="axios"/>
 </p>
 
 - **iOS Client**  
-  - **Language:** Swift 5.5+  
-  - **UI:** SwiftUI (with Combine) or UIKit MVVM pattern.  
-  - **Networking:** Alamofire for REST calls.  
-  - **Local Persistence:** Realm (or Core Data) to cache posters and data.  
-  - **Auth:** Firebase Authentication (email/password).  
-  - **Dependency Management:** Swift Package Manager (SPM) or CocoaPods.
+  - **Language:** Swift 5.5  
+  - **UI:** SwiftUI 2.0 + Combine  
+  - **Networking:** URLSession / Foundation  
+  - **Auth:** Firebase Email/Password
 
 - **Backend API**  
-  - **Language:** Python (Flask) *or* Node.js (Express) *or* Django REST (choose whichever applies).  
-  - **Database:** PostgreSQL for structured data (users, movies, swipes, recommendations).  
-  - **Caching / Message Broker:** Redis + Celery for nightly retraining & email digests.  
-  - **ML Libraries:**  
-    - `sentence-transformers` (e.g., `all-MiniLM-L6-v2`) for content embeddings.  
-  - **Hosting/Deployment:** Heroku / AWS Elastic Beanstalk / Docker (your chosen platform).
-
-- **Testing**  
-  - **iOS Unit/UI Tests:** Xcode XCTest Framework (MovieMatchTests, MovieMatchUITests).  
-  - **API Tests:** Recsend CLI (see below).  
-  - **Continuous Integration:** GitHub Actions to run Xcode builds & tests upon each push.
+  - **Express Proxy:** Node.js + Express + Axios to ML service  
+  - **ML Service:** Python Flask + Sentence-Transformers `all-MiniLM-L6-v2`  
+  - **Database:** PostgreSQL
 
 ---
 
@@ -114,144 +77,53 @@ All of this runs on a backend Flask. The iOS client calls RESTful endpoints to f
  ┌──────────────────────────────────┐
  │       iOS Client                 │
  │  (SwiftUI + Combine)             │
- │                                  │
  │ ┌──────────┐   ┌───────────┐     │
  │ │  View   │──▶│ ViewModel  │     │
  │ └──────────┘   └───────────┘     │
  │      ▲                │          │
- │      │                │          │
- │      │      Alamofire │          │
- │      │   ┌────────────▼───────┐  │
- │      │   │  Networking Layer  │  │
- │      │   │(APIService + JSON) │  │
- │      │   └─────────┬──────────┘  │
- │      │             │             │
- │      │      JSON   │             │
- │      └─────────────▼───────────┘ │
- │            Flask / Express API   │
+ │      │      URLSession │          │
+ │      │   ┌─────────────▼────────┐ │
+ │      │   │  NetworkManager     │  │
+ │      │   └─────────────┬────────┘ │
+ │      │                 │          │
+ │      └─────────────────▼────────┘ │
+ │       Express Proxy (3000)        │
  └──────────────────────────────────┘
-               ▲        ▲
-               │        │
-         ┌─────┘        └─────┐
-         │                    │
- ┌────────────┐          ┌─────────────┐
- │ PostgreSQL │          │   Redis /   │
- │ (Persistent│          │  Celery for │
- │  Storage)  │          │  Tasks/Email│
- └────────────┘          └─────────────┘
-      ▲
-      │
- ┌───────────────┐
- │ ML Engine     │
- │  (sentence-   │
- │ transformers+ │
- │ implicit CF)  │
- └───────────────┘
+               ▲       │             
+               │       │             
+               │  Flask ML Service (5000)
+               │                       
+          PostgreSQL                   
 ```
-
-
-## 🧪 Testing with Recsend CLI
-
-We use **Recsend**—a developer‐focused CLI—to automate end‐to‐end tests of our backend API, rather than manually issuing `curl` commands. This ensures:
-
-- **Readable YAML/JSON Test Suites**  
-  Define request payloads and expected responses in clean, version‐controlled `*.yaml` files.
-- **Reusable Test Suites**  
-  Group multiple endpoints (e.g., user registration, swipe events, recommendations) in one Recsend run.
-- **Automatic Assertions**  
-  Verify HTTP status codes, JSON schema shape, and specific response fields.
-- **Integration in CI**  
-  GitHub Actions invokes Recsend on every push/PR to catch regressions early.
-
-### How to Run Recsend Tests
-
-**Install Recsend CLI**  
-First, clone the Recsend repository, install its dependencies, and return to the main folder.
-```bash
-git clone https://github.com/jaineelmodi11/recsend-developer-focused-CLI.git
-cd recsend-developer-focused-CLI
-pip install -r requirements.txt
-cd ..
-```
-
-**Navigate to the Recsend Config Directory**  
-Change into the `MovieMatchApp/recsend_tests/` folder (where your YAML test definitions live).
-```bash
-cd MovieMatchApp/recsend_tests
-```
-
-**Execute the Test Suite**  
-Run the `recsend` command with your base URL and config files (e.g., `users.yaml`, `swipes.yaml`, `recommendations.yaml`). 
-```bash
-recsend \
-  --base-url=http://localhost:5000/api \
-  --config=users.yaml \
-  --config=swipes.yaml \
-  --config=recommendations.yaml
-
-```
-
-Each `*.yaml` file should define multiple test cases (request + expected result).
-```yaml
-- name: "Record a swipe (like)"
-  request:
-    method: POST
-    path: "/swipe"
-    headers:
-      Authorization: "Bearer {{user_token}}"
-      Content-Type: "application/json"
-    body:
-      user_id: "{{user_id}}"
-      movie_id: 1234
-      liked: true
-  expected:
-    status_code: 200
-    body_contains:
-      success: true
-
-- name: "Fetch 10 recommendations"
-  request:
-    method: GET
-    path: "/recommendations/{{user_id}}?count=10"
-    headers:
-      Authorization: "Bearer {{user_token}}"
-  expected:
-    status_code: 200
-    body_schema: "recommendations_schema.json"
-```
-
-**Review Results**  
-- A green output (“✅ All tests passed”) means the backend matches the client’s expectations.  
-- Any failures will print a diff showing which fields mismatched or which status code was unexpected.
 
 ---
 
-### Why Recsend vs. cURL?
+## 🧪 Testing Content-Based Recommendations
 
-**Clarity**  
-A long `curl` command can be difficult to read and maintain. In Recsend, you describe each test case using a simple YAML structure:
-```yaml
-  name: “Record a swipe (like)”  
-  request:  
-    method: POST  
-    path: “/swipe”  
-    headers:  
-      Authorization: “Bearer {{user_token}}”  
-      Content-Type: “application/json”  
-    body:  
-      user_id: “{{user_id}}”  
-      movie_id: 1234  
-      liked: true  
-  expected:  
-    status_code: 200  
-    body_contains:  
-      success: true  
-```
+1. **Start services**  
+   - **Flask ML Service:**
+     ```bash
+     cd movie-backend
+     source venv/bin/activate
+     python service.py
+     ```  
+   - **Express Proxy:**
+     ```bash
+     cd movie-backend
+     node server.js
+     ```
 
-This format is far more readable than embedding everything inside a single, lengthy `curl` command.
+2. **Run Recsend CLI:**
+   ```bash
+   cd recsend_tests
+   recsend send -f users.yaml
+   recsend send -f swipes.yaml
+   recsend send -f content_recs.yaml
+   ```
 
-**Maintainability**  
-If your API contract changes (for example, request or response fields are updated), you simply edit the YAML file. No need to hunt through multiple `curl` scripts to apply the same change.
+3. **Or via cURL:**
+   ```bash
+   curl http://localhost:3000/recommendations/content/1 | jq .
+   ```
 
-**Automation**  
-With Recsend, you can run all test suites at once by listing multiple config files. This lets you validate user registration, swipe events, recommendation endpoints, etc., with a single command—ideal for automated CI workflows.  
+*README updated to reflect content-based only.*
