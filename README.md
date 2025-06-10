@@ -20,9 +20,19 @@ https://github.com/user-attachments/assets/cd57a3d8-373b-4e89-afb9-21fd22350006
 
 ## 📖 About
 
-MovieMatchApp is an **iOS app** built in **Swift** with **SwiftUI + Combine**, featuring a Tinder‑style swipe interface. Users swipe right to like and left to pass on movie cards, and receive recommendations based solely on movie content embeddings.
+MovieMatchApp is an **iOS application** built in **Swift** with **SwiftUI + Combine**, following an **MVVM** architecture for a clean separation of views and logic. It offers:
 
-Your backend consists of an **Express** proxy and a **Flask** ML service using Sentence‑Transformers (`all‑MiniLM‑L6‑v2`).
+- **Tinder-Style Swipe Interface:** Quickly browse movie cards—swipe right to like, left to pass.
+- **Rich Movie Details:** Tap a card to view synopsis, cast, ratings, and an embedded YouTube trailer.
+- **Smooth UX:** Preloads poster images for seamless scrolling, adds haptic feedback and SwiftUI animations for engaging interactions.
+- **Local Caching:** Caches recently viewed posters to improve load times and support offline exploration.
+
+On the backend, an **Express** proxy routes API calls to a **Flask** ML service powered by a fine-tuned Sentence-Transformers model (`all-MiniLM-L6-v2`) to compute content-based movie embeddings. Swipes are recorded in PostgreSQL, laying the groundwork for future collaborative enhancements.
+
+> **Why “MovieMatch”?**
+> 1. **Discoverability:** Cuts through choice overload to surface movies you’ll love.  
+> 2. **Interactivity:** Gamified swiping makes discovery fun and addictive.  
+> 3. **Content-Driven AI:** Leverages semantic embeddings to recommend contextually relevant titles.
 
 ---
 
