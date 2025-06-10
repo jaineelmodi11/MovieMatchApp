@@ -1,0 +1,4 @@
+# Fetch the full list of movies
+url: http://localhost:3000/movies
+method: GET
+timeout: 5    # seconds

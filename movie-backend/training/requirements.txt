@@ -1,0 +1,9 @@
+flask
+flask-cors
+pandas
+scikit-learn
+scipy
+psycopg2-binary
+requests
+# scikit-surprise is omitted here because it has no prebuilt wheel for Python 3.12.
+# If you really need it, see the note below.
