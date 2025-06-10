@@ -6,13 +6,14 @@ const cors     = require('cors');
 const { Pool } = require('pg');
 const axios    = require('axios');
 
-const app          = express();
-const port         = process.env.PORT || 3000;
-const TMDB_API_KEY = process.env.TMDB_API_KEY || '';
-const AI_SERVICE_BASE = process.env.AI_SERVICE_BASE || '';
-const AI_SERVICE_KEY  = process.env.AI_SERVICE_KEY || '';
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Ensure required environment variables are set
+const TMDB_API_KEY    = process.env.TMDB_API_KEY    || '';
+const AI_SERVICE_BASE = process.env.AI_SERVICE_BASE || '';
+const AI_SERVICE_KEY  = process.env.AI_SERVICE_KEY  || '';
+
+// ─── Env checks ───────────────────────────────────────────────────────────────
 if (!TMDB_API_KEY) {
   console.error('❌ Missing TMDB_API_KEY in .env');
   process.exit(1);
@@ -33,22 +34,7 @@ const pool = new Pool({
   port:     process.env.PG_PORT     || 5432,
 });
 
-// ─── Proxy TMDB full detail ───────────────────────────────────────────────────
-app.get('/movie/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const tmdbResp = await axios.get(
-      `https://api.themoviedb.org/3/movie/${id}`,
-      { params: { api_key: TMDB_API_KEY, language: 'en-US' } }
-    );
-    res.json(tmdbResp.data);
-  } catch (err) {
-    console.error('Error fetching TMDB detail for', id, err.message);
-    res.status(500).json({});
-  }
-});
-
-// ─── Popular movies (for swipe deck) ─────────────────────────────────────────
+// ─── Popular movies (swipe deck) ──────────────────────────────────────────────
 app.get('/movies', async (req, res) => {
   try {
     const tmdb = await axios.get(
@@ -73,7 +59,6 @@ app.post('/swipes', async (req, res) => {
   userId  = Number(userId)  || 1;
   movieId = Number(movieId) || 0;
 
-  console.log(`Swipe recorded → userId: ${userId}, movieId: ${movieId}, direction: ${direction}`);
   try {
     await pool.query(
       'INSERT INTO swipes (user_id, movie_id, direction) VALUES ($1, $2, $3)',
@@ -86,13 +71,12 @@ app.post('/swipes', async (req, res) => {
   }
 });
 
-// ─── Map Firebase UID → small integer ID ─────────────────────────────────────
+// ─── Import or Get User ID ───────────────────────────────────────────────────
 app.post('/users/importOrGetId', async (req, res) => {
   const { firebaseUid, displayName } = req.body;
   if (!firebaseUid) {
     return res.status(400).json({ error: 'firebaseUid is required' });
   }
-
   const text = `
     INSERT INTO users (firebase_uid, display_name)
     VALUES ($1, $2)
@@ -100,46 +84,31 @@ app.post('/users/importOrGetId', async (req, res) => {
       SET display_name = EXCLUDED.display_name
     RETURNING id;
   `;
-  const values = [firebaseUid, displayName || null];
-
   try {
-    const { rows } = await pool.query(text, values);
-    return res.json({ userId: rows[0].id });
+    const { rows } = await pool.query(text, [firebaseUid, displayName || null]);
+    res.json({ userId: rows[0].id });
   } catch (err) {
-    console.error('Error in /users/importOrGetId:', err);
-    return res.status(500).json({ error: 'db error' });
+    console.error('DB error in /users/importOrGetId:', err);
+    res.status(500).json({ error: 'db error' });
   }
 });
 
-// ─── Helper to proxy recs with auth ────────────────────────────────────────────
-async function proxyRecs(req, res, type) {
+// ─── Proxy Content-Based Recs ────────────────────────────────────────────────
+async function proxyContent(req, res) {
   const userId = Number(req.params.userId) || 1;
-  const url    = `${AI_SERVICE_BASE}/recommendations/${type}/${userId}`;
-
-  console.log(`[proxy] ${type} → user ${userId} → ${url}`);
+  const url    = `${AI_SERVICE_BASE}/recommendations/content/${userId}`;
   try {
     const aiResp = await axios.get(url, {
       headers: { 'Authorization': `Bearer ${AI_SERVICE_KEY}` }
     });
-    return res.json(aiResp.data);
+    res.json(aiResp.data);
   } catch (err) {
-    const status = err.response?.status || 500;
-    const data   = err.response?.data   || err.message;
-    console.error(`[proxy] Error fetching ${type} recs:`, status, data);
-    return res.status(status).json([]);
+    console.error('Error fetching content recs:', err.message || err.response?.data);
+    res.status(err.response?.status || 500).json([]);
   }
 }
 
-// ─── Recommendation routes ───────────────────────────────────────────────────
-app.get('/recommendations/content/:userId', (req, res) =>
-  proxyRecs(req, res, 'content')
-);
-app.get('/recommendations/cf/:userId', (req, res) =>
-  proxyRecs(req, res, 'cf')
-);
-app.get('/recommendations/hybrid/:userId', (req, res) =>
-  proxyRecs(req, res, 'hybrid')
-);
+app.get('/recommendations/content/:userId', proxyContent);
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
 app.listen(port, () => {

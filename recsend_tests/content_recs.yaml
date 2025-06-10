@@ -1,0 +1,8 @@
+# recsend_tests/content_recs.yaml
+url: http://localhost:3000/recommendations/content/14
+method: GET
+expected:
+  status_code: 200
+  body_contains:
+    - id
+    - overview
