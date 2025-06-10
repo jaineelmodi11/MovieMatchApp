@@ -10,7 +10,7 @@ Swipe-style movie recommendations on iOS—powered by hybrid AI models and a cle
 
 ## 📸 App_video demo
 
-https://raw.githubusercontent.com/jaineelmodi11/MovieMatchApp/main/docs/assets/App_video.mp4
+https://github.com/user-attachments/assets/f27541c3-729b-48f1-a910-c9871434c7f1
 
 _Click the image above to watch the demo on YouTube._
 
@@ -41,7 +41,7 @@ All of this runs on a backend Flask. The iOS client calls RESTful endpoints to f
   - **Content-Based:** Uses a fine‐tuned Sentence-Transformers model to calculate similarity between movie overviews.  
   - **Collaborative Filtering:** Leverages user‐movie interaction data (implicit feedback) to refine suggestions.
 
-- **Firebase Authentication** (or your chosen Auth)  
+- **Firebase Authentication** (Email/Password + Google OAuth)
   - Email/password sign-up & sign-in. Optionally, include Google/Facebook OAuth.
 
 - **Movie Details & Trailers**  
