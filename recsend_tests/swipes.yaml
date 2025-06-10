@@ -1,0 +1,39 @@
+# recsend_tests/swipes.yaml
+
+- name: "Fetch Swipe Deck"
+  request:
+    method: GET
+    path: "/movies"
+  expected:
+    status_code: 200
+    body_schema: "schemas/movies_list_schema.json"
+
+- name: "Record a Like Swipe"
+  request:
+    method: POST
+    path: "/swipes"
+    headers:
+      Content-Type: "application/json"
+    body:
+      userId: 1
+      movieId: 550
+      direction: "like"
+  expected:
+    status_code: 200
+    body_contains:
+      success: true
+
+- name: "Record a Pass Swipe"
+  request:
+    method: POST
+    path: "/swipes"
+    headers:
+      Content-Type: "application/json"
+    body:
+      userId: 1
+      movieId: 550
+      direction: "pass"
+  expected:
+    status_code: 200
+    body_contains:
+      success: true
