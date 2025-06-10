@@ -4,3 +4,4 @@ DerivedData/
 *.xcworkspace
 Pods/
 .DS_Store
+movie-backend/venv310/
