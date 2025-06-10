@@ -1,0 +1,16 @@
+# recsend_tests/users.yaml
+
+- name: "Import or Get User ID"
+  request:
+    method: POST
+    path: "/users/importOrGetId"
+    headers:
+      Content-Type: "application/json"
+    body:
+      firebaseUid: "test-uid-123"
+      displayName: "Test User"
+  expected:
+    status_code: 200
+    body_contains:
+      userId: 1
+
