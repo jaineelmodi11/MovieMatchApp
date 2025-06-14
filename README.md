@@ -27,7 +27,7 @@ MovieMatchApp is an **iOS application** built in **Swift** with **SwiftUI + Comb
 - **Smooth UX:** Preloads poster images for seamless scrolling, adds haptic feedback and SwiftUI animations for engaging interactions.
 - **Local Caching:** Caches recently viewed posters to improve load times and support offline exploration.
 
-On the backend, an **Express** proxy routes API calls to a **Flask** ML service powered by a fine-tuned Sentence-Transformers model (`all-MiniLM-L6-v2`) to compute content-based movie embeddings. Swipes are recorded in PostgreSQL, laying the groundwork for future collaborative enhancements.
+On the backend, an **Express** proxy routes API calls to a **Flask** ML service powered by a **SNLI/MNLI fine-tuned** Sentence-Transformers model (`all-MiniLM-L6-v2` in `finetuned_embedding/fine_tuned_model`) to compute content-based movie embeddings. Swipes are recorded in PostgreSQL, laying the groundwork for future collaborative enhancements.
 
 > **Why “MovieMatch”?**
 > 1. **Discoverability:** Cuts through choice overload to surface movies you’ll love.  
@@ -75,7 +75,7 @@ On the backend, an **Express** proxy routes API calls to a **Flask** ML service 
 
 - **Backend API**  
   - **Express Proxy:** Node.js + Express + Axios to ML service  
-  - **ML Service:** Python Flask + Sentence-Transformers `all-MiniLM-L6-v2`  
+  - **ML Service: Python Flask + **SNLI/MNLI fine-tuned** Sentence-Transformers all-MiniLM-L6-v2  
   - **Database:** PostgreSQL
 
 ---
