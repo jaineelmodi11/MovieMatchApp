@@ -1,0 +1,3 @@
+[submodule "finetuned_embedding"]
+	path = finetuned_embedding
+	url = https://github.com/jaineelmodi11/MiniLM-FineTuned-SNLI-MNLI.git

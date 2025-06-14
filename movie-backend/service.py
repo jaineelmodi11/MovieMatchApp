@@ -39,7 +39,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Pre-load Transformer model
-hf_model = SentenceTransformer('all-MiniLM-L6-v2')
+# Updated to use the SNLI/MNLI fine-tuned all-MiniLM-L6-v2
+hf_model = SentenceTransformer('finetuned_embedding/fine_tuned_model')
 
 # Auth guard
 @app.before_request
@@ -66,7 +67,6 @@ def fetch_tmdb_details(ids):
         )
         if r.status_code == 200:
             data = r.json()
-            # Keep the original `genres` array so it matches your Movie.genres:[Genre]
             records.append(data)
     return pd.DataFrame(records)
 
