@@ -185,3 +185,13 @@ echo "All tests passed!"
 ```bash
 curl http://localhost:3000/recommendations/content/1 | jq .
 ```
+
+## \U1F680 Docker Setup
+
+Run the entire backend stack with Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+The Flask API will be available on `http://localhost:5000` and the Node proxy on `http://localhost:3000`.

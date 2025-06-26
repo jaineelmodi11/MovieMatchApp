@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: movie-backend/Dockerfile.flask
+    environment:
+      - PORT=5000
+      - AI_SERVICE_BASE=http://api:5000
+      - AI_SERVICE_KEY=${AI_SERVICE_KEY}
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - PG_HOST=db
+      - PG_DATABASE=movieswipe
+      - PG_USER=postgres
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_PORT=5432
+    ports:
+      - "5000:5000"
+  server:
+    build:
+      context: .
+      dockerfile: movie-backend/Dockerfile.node
+    environment:
+      - PORT=3000
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - AI_SERVICE_BASE=http://api:5000
+      - AI_SERVICE_KEY=${AI_SERVICE_KEY}
+      - PG_HOST=db
+      - PG_DATABASE=movieswipe
+      - PG_USER=postgres
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_PORT=5432
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - db
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=movieswipe
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  db_data:
