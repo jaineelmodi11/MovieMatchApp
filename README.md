@@ -1,187 +1,138 @@
 <div align="center">
-  <img src="docs/assets/app_icon.png" width="180" alt="MovieMatch Icon"/>
+
+<img src="docs/assets/app_icon.png" alt="MovieMatch" width="120" />
+
+# MovieMatch
+
+**Swipe-to-discover movie recommendations on iOS — powered by a fine-tuned MiniLM content-based engine and a clean SwiftUI interface.**
+
+[![CI](https://github.com/jaineelmodi11/MovieMatchApp/actions/workflows/ci.yml/badge.svg)](https://github.com/jaineelmodi11/MovieMatchApp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Swift](https://img.shields.io/badge/Swift-5.5-orange.svg)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-2.0-purple.svg)
+![Node](https://img.shields.io/badge/Node.js-18-green.svg)
+![Flask](https://img.shields.io/badge/Flask-3.1-grey.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)
+
 </div>
 
-# MovieMatchApp
+---
 
-Swipe-style movie recommendations on iOS—powered by content-based AI and a clean SwiftUI interface.
+## 🎬 Demo
+
+<div align="center">
+
+[<img src="docs/assets/App_video_thumbnail.png" alt="Watch the demo" width="320" />](docs/assets/App_video.mp4)
+
+*Click to play — Tinder-style swiping, rich movie detail with trailer, and personalized recommendations.*
+
+</div>
 
 ---
 
-## 📸 App Video Demo
+## 📖 Overview
 
+MovieMatch turns movie discovery into a swipe. Like a film to teach the app your taste; pass to move on. Behind the simple interface, a fine-tuned **Sentence-Transformers (MiniLM)** model embeds movie overviews and ranks new titles by semantic similarity to what you've liked.
 
+It's a full-stack project: a native **SwiftUI** client (MVVM + Combine), an **Express** proxy API, a **Flask** ML microservice, and **PostgreSQL** — all runnable with a single `docker compose up`.
 
+## ⭐ Features
 
-https://github.com/user-attachments/assets/cd57a3d8-373b-4e89-afb9-21fd22350006
+- **Swipe interface** — browse movies one card at a time; right to like, left to pass, with haptics and fluid animations.
+- **Content-based recommendations** — a SNLI/MNLI fine-tuned `all-MiniLM-L6-v2` model embeds overviews; cosine similarity against your liked titles surfaces what to watch next.
+- **Rich movie detail** — synopsis, cast, ratings, and an embedded trailer (TMDB).
+- **Firebase auth** — email/password sign-up and sign-in.
+- **Configurable backend** — point the app at localhost or a deployed server via a single `Info.plist` value, no code changes.
+- **Tested & CI-backed** — Jest/supertest API tests, a Python lint job, a Docker build, and end-to-end API contract tests driven by the companion **[recsend](https://github.com/jaineelmodi11/recsend-developer-focused-CLI)** CLI — all on GitHub Actions.
 
+## 🏗 Architecture
 
----
+```mermaid
+flowchart LR
+    subgraph Client["📱 iOS App"]
+        V["SwiftUI Views"] --> VM["ViewModels (MVVM)"]
+        VM --> NM["NetworkManager"]
+    end
 
-## 📖 About
+    NM -->|"REST / URLSession"| API["🟢 Express Proxy API :3000"]
 
-MovieMatchApp is an **iOS application** built in **Swift** with **SwiftUI + Combine**, following an **MVVM** architecture for a clean separation of views and logic. It offers:
+    API -->|"popular & detail"| TMDB["🎞️ TMDB API"]
+    API -->|"users & swipes"| DB[("🐘 PostgreSQL")]
+    API -->|"/recommendations/content"| ML["🐍 Flask ML Service :5000"]
 
-- **Tinder-Style Swipe Interface:** Quickly browse movie cards—swipe right to like, left to pass.
-- **Rich Movie Details:** Tap a card to view synopsis, cast, ratings, and an embedded YouTube trailer.
-- **Smooth UX:** Preloads poster images for seamless scrolling, adds haptic feedback and SwiftUI animations for engaging interactions.
-- **Local Caching:** Caches recently viewed posters to improve load times and support offline exploration.
+    ML -->|"reads likes"| DB
+    ML -->|"MiniLM embeddings → cosine similarity"| ML
+    ML -->|"hydrate results"| TMDB
+```
 
-On the backend, an **Express** proxy routes API calls to a **Flask** ML service powered by a **SNLI/MNLI fine-tuned** Sentence-Transformers model (`all-MiniLM-L6-v2` in `finetuned_embedding/fine_tuned_model`) to compute content-based movie embeddings. Swipes are recorded in PostgreSQL, laying the groundwork for future collaborative enhancements.
-
-> **Why “MovieMatch”?**
-> 1. **Discoverability:** Cuts through choice overload to surface movies you’ll love.  
-> 2. **Interactivity:** Gamified swiping makes discovery fun and addictive.  
-> 3. **Content-Driven AI:** Leverages semantic embeddings to recommend contextually relevant titles.
-
----
-
-## ⭐ Key Features
-
-- **Swipe Interface**  
-  Browse movies one by one: swipe right to “Like,” left to “Pass.”
-
-- **Content-Based Recommendation Engine**  
-  Embeds movie overviews via a Sentence‑Transformers model and finds similar titles.
-
-- **Firebase Authentication**  
-  Email/password sign‑up & sign‑in via Firebase Auth.
-
-- **Recsend CLI for Testing**  
-  Developer-focused CLI for validating endpoints with YAML-defined requests.
-
----
+**Flow:** the app sends swipes to the Express API, which records them in Postgres. When recommendations are requested, Express proxies to the Flask service, which embeds candidate movie overviews with the fine-tuned MiniLM model, scores them against the user's liked-movie vector, and returns the ranked list.
 
 ## 🧰 Tech Stack
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-5.5-orange.svg" alt="Swift 5.5"/>
-  <img src="https://img.shields.io/badge/SwiftUI-2.0-purple.svg" alt="SwiftUI"/>
-  <img src="https://img.shields.io/badge/Combine-1.0-lightgrey.svg" alt="Combine"/>
-  <img src="https://img.shields.io/badge/Firebase-9.x-blue.svg" alt="Firebase"/>
-  <img src="https://img.shields.io/badge/Node.js-18.0-green.svg" alt="Node.js"/>
-  <img src="https://img.shields.io/badge/Express-4.x-lightgrey.svg" alt="Express"/>
-  <img src="https://img.shields.io/badge/Flask-2.1-grey.svg" alt="Flask"/>
-  <img src="https://img.shields.io/badge/PostgreSQL-14.4-blue.svg" alt="PostgreSQL"/>
-  <img src="https://img.shields.io/badge/Sentence--Transformers-orange.svg" alt="sentence-transformers"/>
-  <img src="https://img.shields.io/badge/axios-1.x-blue.svg" alt="axios"/>
-</p>
+| Layer | Tech |
+|-------|------|
+| **iOS client** | Swift 5.5, SwiftUI 2.0, Combine, URLSession, Firebase Auth |
+| **Proxy API** | Node.js 18, Express, Axios |
+| **ML service** | Python, Flask, Sentence-Transformers (`all-MiniLM-L6-v2`, SNLI/MNLI fine-tuned), scikit-learn |
+| **Data** | PostgreSQL 16, TMDB API |
+| **Tooling** | Docker Compose, GitHub Actions CI, [recsend](https://github.com/jaineelmodi11/recsend-developer-focused-CLI) (API testing) |
 
-- **iOS Client**  
-  - **Language:** Swift 5.5  
-  - **UI:** SwiftUI 2.0 + Combine  
-  - **Networking:** URLSession / Foundation  
-  - **Auth:** Firebase Email/Password
+## 🚀 Quick Start
 
-- **Backend API**  
-  - **Express Proxy:** Node.js + Express + Axios to ML service  
-  - **ML Service: Python Flask + **SNLI/MNLI fine-tuned** Sentence-Transformers all-MiniLM-L6-v2  
-  - **Database:** PostgreSQL
+```bash
+git clone --recurse-submodules https://github.com/jaineelmodi11/MovieMatchApp.git
+cd MovieMatchApp
 
----
+cp .env.example .env          # add your TMDB_API_KEY + a shared AI_SERVICE_KEY
+docker compose up --build     # Postgres + Flask ML + Express API
 
-## 🏗 Architecture & Flow
-
-```text
- ┌──────────────────────────────────┐
- │       iOS Client                 │
- │  (SwiftUI + Combine)             │
- │ ┌──────────┐   ┌───────────┐     │
- │ │  View   │──▶│ ViewModel  │     │
- │ └──────────┘   └───────────┘     │
- │      ▲                │          │
- │      │      URLSession │          │
- │      │   ┌─────────────▼────────┐ │
- │      │   │  NetworkManager     │  │
- │      │   └─────────────┬────────┘ │
- │      │                 │          │
- │      └─────────────────▼────────┘ │
- │       Express Proxy (3000)        │
- └──────────────────────────────────┘
-               ▲       │             
-               │       │             
-               │  Flask ML Service (5000)
-               │                       
-          PostgreSQL                   
+curl http://localhost:3000/movies | head   # sanity check
 ```
 
----
+Then open `MovieMatch.xcodeproj` in Xcode and run on the simulator. Full instructions (including pointing the app at a deployed backend) are in **[docs/RUNNING.md](docs/RUNNING.md)**.
 
-## 🧪 Testing with Recsend CLI
+## 🧪 Testing
 
-We use a developer-focused **Recsend CLI** to automate end-to-end testing of our content-based recommendation endpoint. RecSend lets you:
+API behaviour is validated two ways, both in CI:
 
-- **Define Tests in YAML:** Specify request details, headers, body, and expected status codes or response content in version-controlled YAML files.
-- **Run Single or Multiple Suites:** Execute individual test files with `recsend send -f <file>` or batch tests via shell scripts.
-- **Immediate Feedback:** See request URLs, HTTP status codes, response bodies, and simple diffs against expected values.
-- **CI Integration:** Invoke RecSend in GitHub Actions (or other CI) to enforce API stability on every push/PR.
+- **Unit tests** — Jest + supertest cover the Express routes (`npm test` in `movie-backend/`).
+- **Contract tests** — the companion **recsend** CLI runs YAML-defined requests with declarative assertions:
 
-### Sample Test Files
-
-#### `users.yaml`
 ```yaml
+# recsend_tests/users.yaml
 url: http://localhost:3000/users/importOrGetId
 method: POST
-headers:
-  Content-Type: application/json
-body:
-  firebaseUid: "test-uid-123"
-  displayName: "Test User"
+body: { firebaseUid: "test-uid-123", displayName: "Test User" }
 expected:
   status_code: 200
-  body_contains:
-    userId: 14
+  body_contains: [userId]
 ```
-
-#### `swipes.yaml`
-```yaml
-url: http://localhost:3000/swipes
-method: POST
-headers:
-  Content-Type: application/json
-body:
-  userId: 14
-  movieId: 1376434
-  direction: "like"
-expected:
-  status_code: 200
-  body_contains:
-    success: true
-```
-
-#### `content_recs.yaml`
-```yaml
-url: http://localhost:3000/recommendations/content/14
-method: GET
-expected:
-  status_code: 200
-  body_contains:
-    - id
-    - overview
-    - title
-```
-
-### Running Tests
 
 ```bash
-cd recsend_tests
-recsend send -f users.yaml
-recsend send -f swipes.yaml
-recsend send -f content_recs.yaml
+pip install "git+https://github.com/jaineelmodi11/recsend-developer-focused-CLI.git"
+bash recsend_tests/run-tests.sh
 ```
 
-Or create a `run-tests.sh` script:
-```bash
-#!/usr/bin/env bash
-set -e
-recsend send -f users.yaml
-recsend send -f swipes.yaml
-recsend send -f content_recs.yaml
-echo "All tests passed!"
+## 📁 Project Structure
+
+```
+MovieMatch/            SwiftUI app (Views, ViewModels, Models, Services, Theme)
+movie-backend/         Express proxy (server.js) + Flask ML service (service.py)
+db/init.sql            PostgreSQL schema
+docker-compose.yml     One-command full stack
+recsend_tests/         API contract tests (recsend)
+finetuned_embedding/   Fine-tuned MiniLM model (git submodule)
+.github/workflows/     CI pipeline
 ```
 
-### Manual cURL Check
+## 🗺 Roadmap
 
-```bash
-curl http://localhost:3000/recommendations/content/1 | jq .
-```
+- [ ] Surface the hybrid (content + collaborative) recommender in-app
+- [ ] Watchlist / match-history screen backed by stored swipes
+- [ ] Offline evaluation metrics (precision@k) in the README
+- [ ] **Android client** (companion app / cross-platform)
+- [ ] Deployed public backend for a live demo
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE).
