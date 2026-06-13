@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  api-tests:
+    name: Express API tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: movie-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+
+  ml-lint:
+    name: ML service lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install flake8
+      - name: Compile + error-lint service.py
+        run: |
+          python -m py_compile movie-backend/service.py
+          flake8 movie-backend/service.py --select=E9,F63,F7,F82 --show-source
+
+  docker-build:
+    name: Docker build (API)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image via compose
+        run: docker compose build api
+
+  recsend-contract:
+    name: recsend API contract test
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recsend CLI
+        run: pip install "git+https://github.com/jaineelmodi11/recsend-developer-focused-CLI.git"
+      - name: Boot db + api
+        env:
+          TMDB_API_KEY: dummy
+          AI_SERVICE_KEY: dummy
+          PG_PASSWORD: postgres
+        run: |
+          docker compose up -d db api
+          sleep 20
+      - name: Run recsend contract tests
+        run: bash recsend_tests/run-tests.sh

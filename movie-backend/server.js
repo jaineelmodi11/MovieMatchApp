@@ -14,13 +14,15 @@ const AI_SERVICE_BASE = process.env.AI_SERVICE_BASE || '';
 const AI_SERVICE_KEY  = process.env.AI_SERVICE_KEY  || '';
 
 // ─── Env checks ───────────────────────────────────────────────────────────────
-if (!TMDB_API_KEY) {
-  console.error('❌ Missing TMDB_API_KEY in .env');
-  process.exit(1);
-}
-if (!AI_SERVICE_BASE || !AI_SERVICE_KEY) {
-  console.error('❌ Missing AI_SERVICE_BASE or AI_SERVICE_KEY in .env');
-  process.exit(1);
+function requireEnv() {
+  if (!TMDB_API_KEY) {
+    console.error('❌ Missing TMDB_API_KEY in .env');
+    process.exit(1);
+  }
+  if (!AI_SERVICE_BASE || !AI_SERVICE_KEY) {
+    console.error('❌ Missing AI_SERVICE_BASE or AI_SERVICE_KEY in .env');
+    process.exit(1);
+  }
 }
 
 app.use(cors());
@@ -125,6 +127,11 @@ app.get('/movie/:id', async (req, res) => {
 app.get('/recommendations/content/:userId', proxyContent);
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+if (require.main === module) {
+  requireEnv();
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}
+
+module.exports = { app, pool };

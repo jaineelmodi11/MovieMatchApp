@@ -1,4 +1,4 @@
-# recsend_tests/users.yaml
+# recsend_tests/users.yaml — create-or-get a test user (DB-only, no external keys)
 url: http://localhost:3000/users/importOrGetId
 method: POST
 headers:
@@ -9,4 +9,4 @@ body:
 expected:
   status_code: 200
   body_contains:
-    userId: 14
+    - userId

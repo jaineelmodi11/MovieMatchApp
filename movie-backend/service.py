@@ -157,4 +157,5 @@ if __name__ == "__main__":
     app.logger.disabled = True
 
     port = int(os.getenv("PORT","5000"))
-    app.run(port=port, debug=True, use_reloader=False)
+    debug = os.getenv("FLASK_DEBUG", "0") == "1"
+    app.run(port=port, debug=debug, use_reloader=False)
