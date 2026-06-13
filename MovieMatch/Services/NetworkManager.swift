@@ -6,7 +6,15 @@ public final class NetworkManager {
     public static let shared = NetworkManager()
     private init() {}
 
-    private let backendBaseURL = URL(string: "http://127.0.0.1:3000")!
+    /// Backend base URL. Override per-build via the `BackendBaseURL` key in
+    /// Info.plist (e.g. a deployed server); falls back to localhost for the simulator.
+    private let backendBaseURL: URL = {
+        if let s = Bundle.main.object(forInfoDictionaryKey: "BackendBaseURL") as? String,
+           !s.isEmpty, let u = URL(string: s) {
+            return u
+        }
+        return URL(string: "http://127.0.0.1:3000")!
+    }()
 
     /// Reads an Int? from UserDefaults.standard.integer(forKey: "userId")
     private var storedUserId: Int? {

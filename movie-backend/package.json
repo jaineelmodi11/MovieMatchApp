@@ -1,14 +1,14 @@
 {
   "name": "movie-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Jaineel Modi",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.9.0",
     "cors": "^2.8.5",
@@ -16,5 +16,5 @@
     "express": "^4.21.2",
     "pg": "^8.16.0"
   },
-  "description": ""
+  "description": "Express proxy + Flask ML backend for MovieMatch: TMDB integration, swipe logging, and MiniLM content-based recommendations."
 }

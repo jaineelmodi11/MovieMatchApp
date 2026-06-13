@@ -108,6 +108,20 @@ async function proxyContent(req, res) {
   }
 }
 
+// ─── Movie detail (TMDB passthrough) ──────────────────────────────────────────
+app.get('/movie/:id', async (req, res) => {
+  try {
+    const tmdb = await axios.get(
+      `https://api.themoviedb.org/3/movie/${req.params.id}`,
+      { params: { api_key: TMDB_API_KEY, language: 'en-US', append_to_response: 'videos,credits' } }
+    );
+    res.json(tmdb.data);
+  } catch (err) {
+    console.error('Error fetching movie detail:', err.message);
+    res.status(err.response?.status || 500).json(null);
+  }
+});
+
 app.get('/recommendations/content/:userId', proxyContent);
 
 // ─── Start Server ─────────────────────────────────────────────────────────────

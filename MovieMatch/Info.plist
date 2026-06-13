@@ -21,6 +21,10 @@
   <key>CFBundleVersion</key>
   <string>1</string>
 
+  <!-- Backend base URL (override for a deployed server) -->
+  <key>BackendBaseURL</key>
+  <string>http://127.0.0.1:3000</string>
+
   <!-- Allow HTTP to your local server -->
   <key>NSAppTransportSecurity</key>
   <dict>
