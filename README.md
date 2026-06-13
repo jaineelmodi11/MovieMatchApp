@@ -18,18 +18,6 @@
 
 ---
 
-## 🎬 Demo
-
-<div align="center">
-
-[<img src="docs/assets/App_video_thumbnail.png" alt="Watch the demo" width="320" />](docs/assets/App_video.mp4)
-
-*Click to play — Tinder-style swiping, rich movie detail with trailer, and personalized recommendations.*
-
-</div>
-
----
-
 ## 📖 Overview
 
 MovieMatch turns movie discovery into a swipe. Like a film to teach the app your taste; pass to move on. Behind the simple interface, a fine-tuned **Sentence-Transformers (MiniLM)** model embeds movie overviews and ranks new titles by semantic similarity to what you've liked.
