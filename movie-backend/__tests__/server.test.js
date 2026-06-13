@@ -57,3 +57,35 @@ describe('POST /swipes', () => {
     expect(res.body).toEqual({ success: true });
   });
 });
+
+
+describe('GET /recommendations/:kind/:userId', () => {
+  it('proxies hybrid recs from the ML service', async () => {
+    axios.get.mockResolvedValue({ data: [{ id: 1, title: 'X' }] });
+    const res = await request(app).get('/recommendations/hybrid/14');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([{ id: 1, title: 'X' }]);
+  });
+  it('returns the ML error status with [] body', async () => {
+    axios.get.mockRejectedValue({ response: { status: 502 } });
+    const res = await request(app).get('/recommendations/cf/14');
+    expect(res.status).toBe(502);
+    expect(res.body).toEqual([]);
+  });
+});
+
+describe('GET /users/:userId/likes', () => {
+  it('returns hydrated liked movies', async () => {
+    mockQuery.mockResolvedValue({ rows: [{ movie_id: 550 }] });
+    axios.get.mockResolvedValue({ data: { id: 550, title: 'Fight Club' } });
+    const res = await request(app).get('/users/14/likes');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([{ id: 550, title: 'Fight Club' }]);
+  });
+  it('returns [] when user has no likes', async () => {
+    mockQuery.mockResolvedValue({ rows: [] });
+    const res = await request(app).get('/users/14/likes');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+});

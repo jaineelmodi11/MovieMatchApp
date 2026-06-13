@@ -115,8 +115,8 @@ finetuned_embedding/   Fine-tuned MiniLM model (git submodule)
 
 ## 🗺 Roadmap
 
-- [ ] Surface the hybrid (content + collaborative) recommender in-app
-- [ ] Watchlist / match-history screen backed by stored swipes
+- [x] Surface the hybrid (content + collaborative) recommender in-app
+- [x] Watchlist / match-history screen backed by stored swipes
 - [ ] Offline evaluation metrics (precision@k) in the README
 - [ ] **Android client** (companion app / cross-platform)
 - [ ] Deployed public backend for a live demo

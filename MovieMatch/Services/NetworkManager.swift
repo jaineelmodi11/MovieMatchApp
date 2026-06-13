@@ -133,4 +133,28 @@ public final class NetworkManager {
     public func fetchHybridRecs(completion: @escaping ([Movie]) -> Void) {
         fetchRecs(endpoint: "hybrid", completion: completion)
     }
+    // ─── 8) Liked movies (watchlist / history)
+    public func fetchLikedMovies(completion: @escaping ([Movie]) -> Void) {
+        guard let uid = storedUserId else {
+            DispatchQueue.main.async { completion([]) }
+            return
+        }
+        let url = backendBaseURL
+            .appendingPathComponent("users")
+            .appendingPathComponent("\(uid)")
+            .appendingPathComponent("likes")
+
+        var req = URLRequest(url: url)
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        URLSession.shared.dataTask(with: req) { data, _, _ in
+            guard let data = data,
+                  let movies = try? self.jsonDecoder.decode([Movie].self, from: data)
+            else {
+                DispatchQueue.main.async { completion([]) }
+                return
+            }
+            DispatchQueue.main.async { completion(movies) }
+        }.resume()
+    }
 }

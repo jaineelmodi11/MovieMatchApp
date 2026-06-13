@@ -22,6 +22,12 @@ struct MainTabView: View {
           Text("Recs")
         }
 
+      WatchlistView()
+        .tabItem {
+          Image(systemName: "heart")
+          Text("Likes")
+        }
+
       ProfileView()
         .tabItem {
           Image(systemName: "person.crop.circle")

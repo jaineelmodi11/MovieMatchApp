@@ -96,18 +96,20 @@ app.post('/users/importOrGetId', async (req, res) => {
 });
 
 // ─── Proxy Content-Based Recs ────────────────────────────────────────────────
-async function proxyContent(req, res) {
-  const userId = Number(req.params.userId) || 1;
-  const url    = `${AI_SERVICE_BASE}/recommendations/content/${userId}`;
-  try {
-    const aiResp = await axios.get(url, {
-      headers: { 'Authorization': `Bearer ${AI_SERVICE_KEY}` }
-    });
-    res.json(aiResp.data);
-  } catch (err) {
-    console.error('Error fetching content recs:', err.message || err.response?.data);
-    res.status(err.response?.status || 500).json([]);
-  }
+function proxyRecs(kind) {
+  return async (req, res) => {
+    const userId = Number(req.params.userId) || 1;
+    const url    = `${AI_SERVICE_BASE}/recommendations/${kind}/${userId}`;
+    try {
+      const aiResp = await axios.get(url, {
+        headers: { 'Authorization': `Bearer ${AI_SERVICE_KEY}` }
+      });
+      res.json(aiResp.data);
+    } catch (err) {
+      console.error(`Error fetching ${kind} recs:`, err.message || err.response?.data);
+      res.status(err.response?.status || 500).json([]);
+    }
+  };
 }
 
 // ─── Movie detail (TMDB passthrough) ──────────────────────────────────────────
@@ -124,7 +126,35 @@ app.get('/movie/:id', async (req, res) => {
   }
 });
 
-app.get('/recommendations/content/:userId', proxyContent);
+app.get('/recommendations/content/:userId', proxyRecs('content'));
+app.get('/recommendations/cf/:userId',      proxyRecs('cf'));
+app.get('/recommendations/hybrid/:userId',  proxyRecs('hybrid'));
+
+// ─── User's liked movies (watchlist / history) ───────────────────────────────
+app.get('/users/:userId/likes', async (req, res) => {
+  const userId = Number(req.params.userId) || 0;
+  try {
+    const { rows } = await pool.query(
+      "SELECT DISTINCT movie_id FROM swipes WHERE user_id = $1 AND direction = 'like' ORDER BY movie_id DESC",
+      [userId]
+    );
+    const movies = await Promise.all(rows.map(async ({ movie_id }) => {
+      try {
+        const tmdb = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movie_id}`,
+          { params: { api_key: TMDB_API_KEY, language: 'en-US' } }
+        );
+        return tmdb.data;
+      } catch {
+        return null;
+      }
+    }));
+    res.json(movies.filter(Boolean));
+  } catch (err) {
+    console.error('Error fetching liked movies:', err.message);
+    res.status(500).json([]);
+  }
+});
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
 if (require.main === module) {
