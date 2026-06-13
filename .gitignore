@@ -1,7 +1,39 @@
+# ───── Secrets / config (never commit) ─────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+movie-backend/GoogleService-Info.plist
+MovieMatch/GoogleService-Info.plist
+
+# ───── Node ─────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ───── Python ─────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv*/
+movie-backend/venv310/
+
+# ───── ML artifacts / datasets (too large for git) ─────
+*.h5
+*.zip
+movie-backend/training/movielens-1m/
+movie-backend/training/movielens-small/
+movie-backend/models/*.h5
+
+# ───── Xcode ─────
 build/
 DerivedData/
 *.xcuserstate
 *.xcworkspace
+xcuserdata/
 Pods/
+
+# ───── OS ─────
 .DS_Store
-movie-backend/venv310/

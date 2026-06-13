@@ -21,16 +21,16 @@ warnings.filterwarnings("ignore")
 ##### CONFIG #####
 API_KEY          = os.getenv("AI_SERVICE_KEY")
 AI_SERVICE_BASE  = os.getenv("AI_SERVICE_BASE")
-TMDB_API_KEY     = os.getenv("TMDB_API_KEY", "REMOVED_TMDB_KEY")
-if not API_KEY or not AI_SERVICE_BASE:
-    raise RuntimeError("Missing AI_SERVICE_BASE or AI_SERVICE_KEY in .env")
+TMDB_API_KEY     = os.getenv("TMDB_API_KEY")
+if not API_KEY or not AI_SERVICE_BASE or not TMDB_API_KEY:
+    raise RuntimeError("Missing AI_SERVICE_BASE, AI_SERVICE_KEY, or TMDB_API_KEY in .env")
 
 DB_PARAMS = {
-    "host":     "localhost",
-    "database": "movieswipe",
-    "user":     "postgres",
-    "password": "REMOVED_DB_PASSWORD",
-    "port":     5432
+    "host":     os.getenv("PG_HOST", "localhost"),
+    "database": os.getenv("PG_DATABASE", "movieswipe"),
+    "user":     os.getenv("PG_USER", "postgres"),
+    "password": os.getenv("PG_PASSWORD"),
+    "port":     int(os.getenv("PG_PORT", "5432")),
 }
 ##################
 
