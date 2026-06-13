@@ -22,7 +22,7 @@
 
 MovieMatch turns movie discovery into a swipe. Like a film to teach the app your taste; pass to move on. Behind the simple interface, a fine-tuned **Sentence-Transformers (MiniLM)** model embeds movie overviews and ranks new titles by semantic similarity to what you've liked.
 
-It's a full-stack project: a native **SwiftUI** client (MVVM + Combine), an **Express** proxy API, a **Flask** ML microservice, and **PostgreSQL** — all runnable with a single `docker compose up`.
+It's a full-stack project: a native **SwiftUI** client (MVVM + Combine), an **Express** proxy API, a **Flask** ML microservice, and **PostgreSQL** — all runnable with a single `docker compose up`. A **cross-platform [Flutter client](flutter_app/)** (iOS + Android) shares the same backend.
 
 ## ⭐ Features
 
@@ -104,7 +104,8 @@ bash recsend_tests/run-tests.sh
 ## 📁 Project Structure
 
 ```
-MovieMatch/            SwiftUI app (Views, ViewModels, Models, Services, Theme)
+MovieMatch/            Native iOS app — SwiftUI (Views, ViewModels, Models, Services, Theme)
+flutter_app/           Cross-platform client — Flutter (iOS + Android)
 movie-backend/         Express proxy (server.js) + Flask ML service (service.py)
 db/init.sql            PostgreSQL schema
 docker-compose.yml     One-command full stack
@@ -118,7 +119,7 @@ finetuned_embedding/   Fine-tuned MiniLM model (git submodule)
 - [x] Surface the hybrid (content + collaborative) recommender in-app
 - [x] Watchlist / match-history screen backed by stored swipes
 - [ ] Offline evaluation metrics (precision@k) in the README
-- [ ] **Android client** (companion app / cross-platform)
+- [x] **Cross-platform Flutter client (iOS + Android)** — see [`flutter_app/`](flutter_app/)
 - [ ] Deployed public backend for a live demo
 
 ## 📄 License
