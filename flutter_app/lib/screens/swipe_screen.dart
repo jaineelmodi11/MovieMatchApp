@@ -132,7 +132,7 @@ class _RoundButton extends StatelessWidget {
           color: AppColors.surface,
           shape: BoxShape.circle,
           border: Border.all(color: color, width: 2),
-          boxShadow: [BoxShadow(color: color.withOpacity(0.3), blurRadius: 16)],
+          boxShadow: [BoxShadow(color: color.withAlpha(77), blurRadius: 16)],
         ),
         child: Icon(icon, color: color, size: 30),
       ),

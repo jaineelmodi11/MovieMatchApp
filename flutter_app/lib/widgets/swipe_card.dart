@@ -13,7 +13,7 @@ class SwipeCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadii.card),
         boxShadow: [
-          BoxShadow(color: AppColors.primary.withOpacity(0.25), blurRadius: 30, offset: const Offset(0, 12)),
+          BoxShadow(color: AppColors.primary.withAlpha(64), blurRadius: 30, offset: const Offset(0, 12)),
         ],
       ),
       child: ClipRRect(
